@@ -5,11 +5,13 @@ import java.io.Serializable;
 public class Department implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	// Atributos
 	private Integer id;
 	private String name;
 
+	// Construtores
 	public Department() {
+
 	}
 
 	public Department(Integer id, String name) {
@@ -17,6 +19,7 @@ public class Department implements Serializable {
 		this.name = name;
 	}
 
+	// Getters and Setters
 	public Integer getId() {
 		return id;
 	}
