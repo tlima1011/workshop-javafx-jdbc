@@ -126,6 +126,7 @@ public class SellerFormController implements Initializable {
 		Seller obj = new Seller();
 		ValidationException exception = new ValidationException("Validation error");
 		obj.setId(Utils.tryParseToInt(txtId.getText()));
+		
 		if (txtName.getText() == null || txtName.getText().trim().equals("")) {
 			exception.addError("name", "Field can't be empty");
 		}
@@ -133,6 +134,7 @@ public class SellerFormController implements Initializable {
 		if (exception.getErrors().size() > 0) {
 			throw exception;
 		}
+		obj.setDepartment(comboBoxDepartment.getValue());
 		return obj;
 	}
 
@@ -142,16 +144,17 @@ public class SellerFormController implements Initializable {
 	}
 
 	@Override
-	public void initialize(URL url, ResourceBundle rbd) {
-
+	public void initialize(URL url, ResourceBundle rb) {
+		initializeNodes();
 	}
-
+	
 	private void initializeNodes() {
 		Constraints.setTextFieldInteger(txtId);
 		Constraints.setTextFieldMaxLength(txtName, 70);
 		Constraints.setTextFieldDouble(txtBaseSalary);
 		Constraints.setTextFieldMaxLength(txtEmail, 60);
 		Utils.formatDatePicker(dpBirthDate, "dd/MM/yyyy");
+		
 		initializeComboBoxDepartment();
 	}
 
@@ -167,19 +170,19 @@ public class SellerFormController implements Initializable {
 		if (entity.getBirthDate() != null) {
 			dpBirthDate.setValue(LocalDate.ofInstant(entity.getBirthDate().toInstant(), ZoneId.systemDefault()));
 		}
-		if(entity.getDepartment() == null) {
+		if (entity.getDepartment() == null) {
 			comboBoxDepartment.getSelectionModel().selectFirst();
-		}else {
+		} else {
 			comboBoxDepartment.setValue(entity.getDepartment());
 		}
 				
 	}
 
 	public void loadAssociatedObjects() {
-		List<Department> list = departmentService.findAll();
 		if (departmentService == null) {
 			throw new IllegalStateException("DepartmentService was null");
 		}
+		List<Department> list = departmentService.findAll();
 		obsList = FXCollections.observableArrayList(list);
 		comboBoxDepartment.setItems(obsList);
 	}
@@ -191,6 +194,8 @@ public class SellerFormController implements Initializable {
 			labelErrorName.setText(errors.get("name"));
 		}
 	}
+	
+	
 
 	private void initializeComboBoxDepartment() {
 		Callback<ListView<Department>, ListCell<Department>> factory = lv -> new ListCell<Department>() {

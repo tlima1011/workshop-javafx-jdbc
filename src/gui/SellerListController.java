@@ -94,8 +94,6 @@ public class SellerListController implements Initializable, DataChangeListener {
 		
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewSeller.prefHeightProperty().bind(stage.heightProperty());
-		initEditButtons();
-		initRemoveButtons();
 	}
 
 	public void updateTableView() {
@@ -105,11 +103,13 @@ public class SellerListController implements Initializable, DataChangeListener {
 		List<Seller> list = service.findAll();
 		obsList = FXCollections.observableArrayList(list);
 		tableViewSeller.setItems(obsList);
+		initEditButtons();
+		initRemoveButtons();
 	}
 
-	private void createDialogForm(Seller obj, String absolutName, Stage parentStage) {
+	private void createDialogForm(Seller obj, String absoluteName, Stage parentStage) {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(absolutName));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
 			SellerFormController controller = loader.getController();
@@ -120,7 +120,7 @@ public class SellerListController implements Initializable, DataChangeListener {
 			controller.updateFormData();
 
 			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Enter seller stage");
+			dialogStage.setTitle("Enter Seller data");
 			dialogStage.setScene(new Scene(pane));
 			dialogStage.setResizable(false);
 			dialogStage.initOwner(parentStage);

@@ -68,7 +68,7 @@ public class DepartmentListController implements Initializable, DataChangeListen
 	}
 
 	@Override
-	public void initialize(URL uri, ResourceBundle rbd) {
+	public void initialize(URL url, ResourceBundle rbd) {
 		initializeNodes();
 	}
 
@@ -88,6 +88,8 @@ public class DepartmentListController implements Initializable, DataChangeListen
 		List<Department> list = service.findAll();
 		obsList = FXCollections.observableArrayList(list);
 		tableViewDepartment.setItems(obsList);
+		initEditButtons();
+		initRemoveButtons();
 	}
 
 	private void createDialogForm(Department obj, String absolutName, Stage parentStage) {
@@ -157,19 +159,19 @@ public class DepartmentListController implements Initializable, DataChangeListen
 	}
 
 	private void removeEntity(Department obj) {
-		Optional<ButtonType> result =  Alerts.showConfirmation("Confirmation", "Are you sure to delete?"); 
-		if(result.get() == ButtonType.OK) {
-			if(service == null) {
+		Optional<ButtonType> result = Alerts.showConfirmation("Confirmation", "Are you sure to delete?");
+
+		if (result.get() == ButtonType.OK) {
+			if (service == null) {
 				throw new IllegalStateException("Service was null");
 			}
 			try {
 				service.remove(obj);
 				updateTableView();
 			}
-			catch(DbIntegrityException e) {
-				Alerts.showAlert("Error remove object", null, e.getMessage(), AlertType.ERROR);
+			catch (DbIntegrityException e) {
+				Alerts.showAlert("Error removing object", null, e.getMessage(), AlertType.ERROR);
 			}
-			
 		}
 	}
 }
